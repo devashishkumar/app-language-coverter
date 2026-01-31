@@ -1,0 +1,28 @@
+{
+  "name": "app-language-coverter",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "Gemini AI",
+    "nodejs",
+    "code conversion",
+    "Gemini AI code coverter",
+    "code coverter",
+    "app-language-converter"
+  ],
+  "license": "ISC",
+  "author": "Ashish",
+  "type": "module",
+  "main": "repo-converter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@octokit/rest": "^22.0.1",
+    "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
+    "node-fetch": "^3.3.2",
+    "simple-git": "^3.27.0"
+  }
+}
