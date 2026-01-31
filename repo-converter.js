@@ -26,11 +26,21 @@ if (!repoUrl || !targetLanguage) {
 const tempDir = path.join(__dirname, 'temp-repo');
 const outputDir = path.join(__dirname, 'converted-code');
 
+/**
+ * Clones a Git repository to a specified directory.
+ * @param {string} url - The URL of the Git repository to clone.
+ * @param {string} dir - The directory path where the repository should be cloned.
+ */
 async function cloneRepo(url, dir) {
   const git = simpleGit();
   await git.clone(url, dir);
 }
 
+/**
+ * Retrieves all code files from the given directory, excluding node_modules and hidden directories.
+ * @param {string} dir - The directory path to search for code files.
+ * @returns {Array<string>} An array of file paths for code files.
+ */
 async function getCodeFiles(dir) {
   const files = [];
   function traverse(currentPath) {
@@ -53,13 +63,26 @@ async function getCodeFiles(dir) {
   return files;
 }
 
+/**
+ * Converts code from one programming language to another using AI.
+ * @param {string} content - The source code content to convert.
+ * @param {string} sourceLang - The source programming language.
+ * @param {string} targetLang - The target programming language.
+ * @returns {string} The converted code.
+ */
 async function convertCode(content, sourceLang, targetLang) {
   const prompt = `Convert the following code from ${sourceLang} to ${targetLang}. Provide only the converted code without any explanations or markdown formatting.`;
   const result = await model.generateContent(`${prompt}\n\n${content}`);
   return result.response.text();
 }
 
-// in case of rate limiting, we add a retry mechanism
+/**
+ * Converts code with retry mechanism in case of rate limiting.
+ * @param {string} content - The source code content to convert.
+ * @param {string} sourceLang - The source programming language.
+ * @param {string} targetLang - The target programming language.
+ * @returns {string} The converted code.
+ */
 async function convertCodeWithRetry(content, sourceLang, targetLang) {
   const prompt = `Convert the following code from ${sourceLang} to ${targetLang}. Provide only the converted code without any explanations or markdown formatting.`;
   try {
@@ -76,6 +99,11 @@ async function convertCodeWithRetry(content, sourceLang, targetLang) {
   }
 }
 
+/**
+ * Maps file extensions to programming language names.
+ * @param {string} ext - The file extension (e.g., '.js').
+ * @returns {string} The corresponding language name or 'Unknown'.
+ */
 function getLanguageFromExt(ext) {
   const langMap = {
     '.js': 'JavaScript',
@@ -92,6 +120,9 @@ function getLanguageFromExt(ext) {
   return langMap[ext] || 'Unknown';
 }
 
+/**
+ * Main function that orchestrates the repository conversion process.
+ */
 async function main() {
   try {
     // Clean up previous runs
@@ -135,6 +166,11 @@ async function main() {
   }
 }
 
+/**
+ * Maps programming language names to file extensions.
+ * @param {string} lang - The programming language name.
+ * @returns {string} The corresponding file extension or '.txt' as default.
+ */
 function getExtFromLanguage(lang) {
   const extMap = {
     'JavaScript': '.js',
